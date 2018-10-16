@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>SAPASA</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/bootstrap.css">
+   <script src="js/popper.min.js"></script>
+  <script src="js/jquery-3.3.1.js"></script>
+  <script type="text/javascript" src="js/xml2json.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+</head>
+<body>
+  <div class="card-header bg-info text-white">
+     <div class="row">
+      <div class="col-3 ">   <a href="#" class="retorna" style='display:none;' ><img  src="retorno.png"> </a>  </div>
+      <div class="col-6 text-center"><h5>SAPASA </h5> </div>
+      <div class="col-3  text-right">
+      <a href="#" class="opcion" data-toggle="modal" data-target="#menu"  style='display:none;'  ><img  src="opciones.png"> </a>        
+      </div>  
+    </div>
+  </div>
+  <div class="card-body" >
+    <br> <br>
+    <center>
+    <div class="col-md-4" id="principal">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h5 class="panel-title">Iniciar Sesión</h5>
+        </div>
+        <div class="panel-body">
+        <form accept-charset="UTF-8" role="form">
+          <fieldset>
+            <div class="form-group">
+              <input class="form-control" placeholder="Usuario" id="user" name="usuario" type="text">
+            </div>
+            <div class="form-group">
+              <input class="form-control" placeholder="Contraseña" id="pass" name="password" type="password" value="">
+            </div>
+              <!--<div class="checkbox">
+                  <label>
+                    <input name="remember" type="checkbox" value="Remember Me"> Recordarme
+                  </label>
+                </div>-->
+              <input class="btn btn-lg btn-success btn-block" id="iniciar" type="button" value="Acceder">
+                
+
+          </fieldset>
+        </form>
+      </div>
+    </div>
+    </div>
+    </center>
+    <div class="table-responsive-sm"  id="info" style='display:none;'>
+ 	  <p id="demo"></p> 
+<input id="buscar" type="text" class="form-control" onkeyup="myFunction()" placeholder="Buscar..." />
+     
+    <table id="tabla" class="table table-striped">
+      <thead>
+        <tr>
+          <th>Cuenta</th>
+          <th>Domicilio</th>
+          <th>Medidor</th>
+        </tr>
+      </thead>
+      <tbody class="datos">
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- INFORMACION PARA ENVIAR   -->
+ <div class="card-footer" style='display:none;'>
+<!--style='display:none;'-->
+    <form action="/regstro.php">
+      <div class="form-group">
+        <label for="email">Domicilio:</label>
+        <input type="email" class="form-control"  disabled id="domicilio">
+      </div>
+      <div class="form-group">
+        <label for="pwd">Usuario:</label>
+        <input type="text" class="form-control"  disabled id="usuario">
+      </div>
+      <div class="form-group">
+        <label for="email">Medidor:</label>
+        <input type="text" class="form-control"  disabled id="medidor">
+      </div>
+      <div class="form-group">
+        <label for="email">Nueva lectura:</label>
+        <input type="number" class="form-control"  id="lectura">
+      </div>
+      <div class="form-group">
+        <label for="comment">Observaciones:</label>
+        <textarea class="form-control" rows="5" id="observacion"></textarea>
+      </div>
+      <div class="respuesta"></div>
+      <button type="button" class="btn btn-primary active" id="registro" >Registrar</button>
+      <button type="button" class="btn btn-primary active retorna">Cancelar</button>
+      <button type="button" class="btn btn-primary " id="imprimir">Imprimir</button>
+    </form>
+  </div>
+  <p id="contenedor"></p>
+  <div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content"> 
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Nuevo registro</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+         Se ha registrado con éxito
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary " id="valor" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="menu">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">     
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Menú</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+          <ul class="list-group">
+            <li class="list-group-item">Rutas </li>
+            <li class="list-group-item">Realizadas</li>
+            <li class="list-group-item">Impresiones</li>
+            <li class="list-group-item" ><a href="index.html">Salir</a></li>
+          </ul>
+        </div>        
+        <!-- Modal footer -->
+      </div>
+    </div>
+  </div>
+<div id="result"></div>
+<script type="text/javascript">
+  var text='{"Consulta": {"Inmueble": [{"@attributes": { "forma": "0","rutac": "4","rutad": "G:1 R:1","bloque": "1","cuenta": "52602-52602-1",  "usuario": "HERNANDEZ CARBALLO JOSE LUIS","fechavenc": "20150101","folio_ruta": "1", "periodoact": "1","periodofact": "79","periodolect": "79","seriemedidor": "xxxx"},  "Generales": {"@attributes": { "bis": "","giro": "1","lote": "32","calle": "CALLE BELIZARIO DOMINGUEZ","nivel": "1","numero": "0", "colonia": "EMILIANO ZAPATA","edotoma": "1","manzana": "81","seccion": "","diametro": "13","interior": "","sitcomer": "1","edopredio": "1",            "localidad": "ATIZAPAN", "tservicio": "1","cal_cliente": "", "localizacion":"DATOFALTA" } },"Lecturas": {"@attributes": {"consprom": "0", "fechaant": "20160301",            "medidorc": "0","fechareal": "20150401","indiceinf": "0","indicesup": "0", "lecturaant": "0","conspromanual": "-99999.000", "consumoanterior": "0",            "ultimalecturareal": "0" } }, "EstadoCuenta": {"@attributes": { "periodou": "79", "peradeudo": "0", "pagovencido": "0", "mesvencidopago": "0","periodosatiempo": "0" } }  }, { "@attributes": { "forma": "0","rutac": "4","rutad": "G:1 R:1","bloque": "1","cuenta": "51824-51824-1", "usuario": "GARCIA RAMIREZ CARLOS", "fechavenc": "20150101", "folio_ruta": "2","periodoact": "1", "periodofact": "79","periodolect": "79","seriemedidor": "xxxx" },"Generales": {  "@attributes": { "bis": "","giro": "1",  "lote": "", "calle": "CALLE BENITO JUAREZ","nivel": "1","numero": "21","colonia": "EMILIANO ZAPATA",          "edotoma": "1", "manzana": "83","seccion": "","diametro": "13", "interior": "21","sitcomer": "1", "edopredio": "1",  "localidad": "ATIZAPAN",            "tservicio": "1", "cal_cliente": "","localizacion":"FALTADATO" } },"Lecturas": { "@attributes": {"consprom": "0","fechaant": "20160301", "medidorc": "0", "fechareal": "20150401", "indiceinf": "0","indicesup": "0","lecturaant": "0","conspromanual": "-99999.000",  "consumoanterior": "0","ultimalecturareal": "0"} }, "EstadoCuenta": { "@attributes": { "periodou": "79", "peradeudo": "76","pagovencido": "0","mesvencidopago": "0","periodosatiempo": "0" } }},{"@attributes": {"forma": "0","rutac": "4",      "rutad": "G:1 R:1","bloque": "1","cuenta": "51588-51588-1", "usuario": "PRADO BOLAÑOS IRENE", "fechavenc": "20150101", "folio_ruta": "3",    "periodoact": "1", "periodofact": "79","periodolect": "79","seriemedidor": "150209186"  }, "Generales": { "@attributes": {  "bis": "", "giro": "1","lote": "","calle": "CALLE MARIANO ESCOBEDO","nivel": "1", "numero": "25","colonia": "AMPL. EMILIANO ZAPATA","edotoma": "1","manzana": "", "seccion": "", "diametro": "13", "interior": "25", "sitcomer": "1","edopredio": "1","localidad": "ATIZAPAN","tservicio": "1", "cal_cliente": "","localizacion": "DATOFALTA" } },"Lecturas": {   "@attributes": { "consprom": "41.670","fechaant": "20180102","medidorc": "106259","fechareal": "20180102", "indiceinf": "26", "indicesup": "79",       "lecturaant": "346", "conspromanual": "57.690", "consumoanterior": "53","ultimalecturareal": "346.00" }},"EstadoCuenta": { "@attributes": {"periodou": "79",    "peradeudo": "2", "pagovencido": "0","mesvencidopago": "0", "periodosatiempo": "0" } } },{ "@attributes": {"forma": "0", "rutac": "4","rutad": "G:1 R:1", "bloque": "1","cuenta": "125248-1312749-1", "usuario": "D>E PRUEBA MANTENIMIENTO USUARIOS",      "fechavenc": "20150101", "folio_ruta": "99999999","periodoact": "1", "periodofact": "79","periodolect": "79","seriemedidor": "xxxx" }, "Generales": {          "@attributes": {"bis": "","giro": "401","lote": "","calle": "CALLE DE LAS MANZANAS","nivel": "1","numero": "0","colonia": "SAN MIGUEL XOCHIMANGA","edotoma": "0","manzana": "CAPTURAR","seccion": "",  "diametro": "0", "interior": "", "sitcomer": "1",  "edopredio": "2", "localidad": "ATIZAPAN", "tservicio": "1", "cal_cliente": "", "localizacion":"DATOFALTA"  }},"Lecturas": {  "@attributes": { "consprom": "-1.000", "fechaant": "", "medidorc": "0", "fechareal": "", "indiceinf": "0","indicesup": "0","lecturaant": "0", "conspromanual": "-99999.000", "consumoanterior": "0", "ultimalecturareal": "" } },"EstadoCuenta": { "@attributes": { "periodou": "79", "peradeudo": "12", "pagovencido": "0", "mesvencidopago": "0", "periodosatiempo": "0" }   }  } ] }}';
+  obj = JSON.parse(text);
+//jQuery.throughObject(obj);
+//console.log(text);
+  document.getElementById("demo").innerHTML ="RUTA "+ obj.Consulta.Inmueble[0]["@attributes"].rutad;// " CUENTA :" + obj.Consulta.Inmueble[0]["@attributes"].cuenta+"DOMICILIO :"+obj.Consulta.Inmueble[0].Generales["@attributes"].calle+"colonia "+obj.Consulta.Inmueble[0].Generales["@attributes"].colonia +"localidad"+ obj.Consulta.Inmueble[0].Generales["@attributes"].localidad+" "+obj.Consulta.Inmueble[0].Generales["@attributes"].manzana+"Medidor"+  obj.Consulta.Inmueble[0]["@attributes"].seriemedidor;
+  var cadena="";
+//console.log( );
+  for (var i = 0; i <Object.keys(obj.Consulta.Inmueble).length ; i++) {
+   cadena+="<tr id="+i+" > <td> "+ obj.Consulta.Inmueble[i]["@attributes"].cuenta +" </td> <td> "+obj.Consulta.Inmueble[i].Generales["@attributes"].calle+",COLONIA "+obj.Consulta.Inmueble[i].Generales["@attributes"].colonia +", LOCALIDAD "+ obj.Consulta.Inmueble[i].Generales["@attributes"].localidad+", "+obj.Consulta.Inmueble[i].Generales["@attributes"].manzana+"  </td>  <td> "+ obj.Consulta.Inmueble[i]["@attributes"].seriemedidor+" </td></tr>";
+  }
+//var xmlDOM = new DOMParser().parseFromString('R4.xml', 'text/xml');
+//var jsonText = xmlToJson(xmlDOM);
+
+//var obj=xmlToJson(xmlDOM);
+//var valores = JSON.parse(strjson);
+/*
+console.log(strjson.length);
+*/
+  $('.datos').html(cadena);
+  $("tr").click(function() {
+   var id= $(this).attr("id");
+     $("#domicilio").val(obj.Consulta.Inmueble[id].Generales["@attributes"].calle+",COLONIA "+obj.Consulta.Inmueble[id].Generales["@attributes"].colonia +", LOCALIDAD"+ obj.Consulta.Inmueble[id].Generales["@attributes"].localidad+", "+obj.Consulta.Inmueble[id].Generales["@attributes"].manzana);
+     $("#usuario").val(obj.Consulta.Inmueble[id]["@attributes"].usuario);
+     $("#medidor").val(obj.Consulta.Inmueble[id]["@attributes"].seriemedidor);
+     $('.card-footer').show(); //muestro mediante clase
+      $('.card-body').hide();
+      $('.retorna').show();
+      $("#imprimir").addClass("disabled");
+      $("#registro").addClass("active");
+  });
+  $(".opcion").on( "click", function() {
+      //$('#target').show(); //muestro mediante id
+    $('.card-footer').show(); //muestro mediante clase
+    $('.card-body').hide();
+    $('.retorna').show();
+  });
+  $(".retorna").on( "click", function() {
+      //$('#target').show(); //muestro mediante id
+    $('.card-footer').hide(); //muestro mediante clase
+    $('.card-body').show();
+    $('.retorna').hide();
+    $("#registro").removeClass("disabled");
+    $("#registro").addClass("active");
+    $('#lectura').val("");
+  });
+  $("#iniciar").on( "click", function() {
+      //$('#target').show(); //muestro mediante id
+    if ($("#user").val()=="usuario" && $('#pass').val()=="usuarioprueba" || $("#user").val()=="prueba" && $('#pass').val()=="prueba" ) {
+      $('#principal').hide();
+      $('#info').show();
+      $('.opcion').show();
+    }else
+    alert("Usuario/Contraseña incorrecto ");
+  });
+  $("#valor").click(function() {
+   $("#imprimir").removeClass("disabled");
+   $("#imprimir").addClass("active");
+   $("#registro").removeClass("active");
+   $("#registro").addClass("disabled");
+  });
+
+  
+  var latitud, longitud;
+  if (navigator.geolocation) {
+    navigator.geolocation.watchPosition(showPosition);
+  } else { 
+    alert("Geolocation is not supported by this browser.");
+  }
+  function showPosition(position) {
+  alert(position.coords.latitude+"|"+position.coords.longitude);
+    latitud=position.coords.latitude;
+    longitud=position.coords.longitude;
+  }
+
+  var id=0;
+  $("#registro").click(function() {
+
+ 
+
+    if ($("#lectura").val()=="")
+      alert("No se pudo registrar el campo está vacio"); 
+    else{    
+
+     
+
+      var domicilio = $("#domicilio").val(),
+      usuario = $("#usuario").val(),
+      medidor = $("#medidor").val(),
+      lectura = $("#lectura").val(),
+      observacion = $("#observacion").val();
+      var datos = {"domicilio":domicilio, "usuario":usuario,"medidor":medidor,"lectura":lectura,"observacion":observacion,"latitud":latitud,"longitud":longitud};
+      if (navigator.onLine) {
+        console.log('online');
+        //"nombre del parámetro POST":valor (el cual es el objeto guardado en las variables de arriba)
+        $.ajax({
+          url: "datos.php",
+          type: "POST",
+          data: datos
+        }).done(function(respuesta){
+          console.log(JSON.stringify(respuesta));
+          $(".respuesta").html(" Datos registrados:<br><pre>"+JSON.stringify(respuesta, null, 2)+"</pre>");
+        });
+        $("#myModal").modal();
+      } else {
+          objeto = JSON.stringify(datos);
+          localStorage.setItem(id,objeto);
+          alert("Problema de conexion, los datos serán enviados automaticamente cuando tenga conexión."+id);
+          id+=1;
+          console.log('offline');
+        }
+    } 
+  });
+
+
+
+window.addEventListener('offline', function(e) {  
+  document.getElementById("result").innerHTML = ""; 
+    // Retrieve
+});
+window.addEventListener('online', function(e) {  
+ if (localStorage.length!=0) {
+  var infor="";
+    for (var i = 0 ; i < id; i++) {
+      var resultado = localStorage.getItem(i); 
+//JSON.parse convierte a objeto
+      objeto = JSON.parse(resultado); 
+      $.ajax({
+      async:false,  
+      url: "datos.php",
+      type: "POST",
+      data: objeto
+      }).done(function(respuesta){
+      alert(JSON.stringify(respuesta));
+      infor+=JSON.stringify(respuesta);
+      });
+    }
+    alert(infor);
+    $(".respuesta").html(" Datos registrado:<br><pre>"+infor+"</pre>"); 
+    id=0;
+    localStorage.clear();
+    $("#myModal").modal();
+//devuelve "object" 
+    console.log(typeof objeto);
+  }else
+    alert("no hay datos que guardar ");
+});
+/*
+
+var busqueda = document.getElementById('buscar');
+    var table = document.getElementById("tabla").tBodies[0];
+
+    buscaTabla = function(){
+      texto = busqueda.value.toLowerCase();
+      var r=0;
+      while(row = table.rows[r++])
+      {
+        if ( row.innerText.toLowerCase().indexOf(texto) !== -1 )
+          row.style.display = null;
+        else
+          row.style.display = 'none';
+      }
+    }
+
+    busqueda.addEventListener('keyup', buscaTabla);
+
+
+
+    */
+
+  function animateDisplay(obj,time,value) {   
+      var velocidad = 0.2;
+      var opacity = value == 0?1:0; 
+      var direccion = value == 0? -1*velocidad:1*velocidad; 
+      var id = setInterval(function(){        
+        obj.style.opacity = opacity;
+        opacity = opacity + direccion;        
+        if(opacity < 0 || opacity > 1){         
+          obj.style.display = (value == 0)?"none":"";         
+          clearInterval(id);
+        }       
+      }, time);                 
+    }
+    
+        myFunction = function () {            
+      var inputText = document.getElementById('buscar').value.toUpperCase().trim();   
+      var tabla = document.getElementById('tabla');         
+      var tabla_body = tabla.getElementsByTagName('tbody');
+      var tabla_tr = tabla_body[0].getElementsByTagName("tr");
+      var tabla_td;
+      var tdText;
+      var tdText2;
+      var flag_encontro = 0;
+      var indexOf;
+      for (i=0; i<tabla_tr.length; i++){                
+        tabla_td = tabla_tr[i].getElementsByTagName("td");      
+        for (j=0; j<tabla_td.length; j++){  
+          tdText2 = tabla_td[j].innerText;
+          tdText = tabla_td[j].innerText.toUpperCase();                       
+          indexOf = tdText.indexOf(inputText);
+          if(indexOf != -1){
+            flag_encontro = 1;    
+            if(inputText != ''){
+              tabla_td[j].style.backgroundColor=('#AED6F1');                                
+              tabla_td[j].innerHTML = 
+              tdText2.substring(0,indexOf)+
+              '<b>' + tdText2.substring(indexOf,indexOf + inputText.length) + '</b>' +
+              tdText2.substring(indexOf + inputText.length,tdText2.length);           
+            }           
+          }         
+          if(inputText == '') {
+            tabla_td[j].style.backgroundColor=('');
+            tabla_td[j].innerHTML = tdText2;
+          }         
+        }                     
+        if(flag_encontro == 0){
+          animateDisplay(tabla_tr[i],50,0);                       
+        }
+        else{   
+          animateDisplay(tabla_tr[i],50,1);     
+          flag_encontro = 0;          
+        }   
+        
+      }  
+    } 
+
+//var objson = xml2json.fromFile('R4.xml');
+  //var strjson = xml2json.fromFile('R4.xml', 'string');
+//var objson = xml2json.fromStr(strjson);
+//var objson = xml2json.fromStr('R4.xml');
+//var xmlDOM = new DOMParser().parseFromString('R4.xml', 'text/xml');
+//var jsonText = xmlToJson();
+//var result=convertirXmlEnObjeto('prueba.xml'); 
+//console.log(result);
+  </script>
+<!--
+<div class="container">
+  <h2>Medidor de Agua</h2>
+  <div class="card">
+    <div class="card-header">Header</div>
+    <div class="card-body">Content</div> 
+    <div class="card-footer">Footer</div>
+  </div>
+</div>-->
+
+</body>
+</html>
